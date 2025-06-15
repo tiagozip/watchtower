@@ -1,0 +1,17 @@
+{
+  "name": "watchtower",
+  "module": "src/index.js",
+  "dependencies": {
+    "discord.js": "^14.19.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.16"
+  },
+  "scripts": {
+    "start": "bun run src/index.js",
+    "dev": "bun run --watch src/index.js",
+    "forever": "pm2 start src/index.js --name watchtower"
+  },
+  "private": true,
+  "type": "module"
+}
