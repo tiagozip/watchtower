@@ -4,6 +4,8 @@
 
 open-source Discord moderation bot that actually doesn't suck—powerful, privacy-friendly, and stays out of your way
 
+**[learn more & invite →](https://wtbot.pages.dev/)**
+
 ## features
 
 - spam detection with Perspective
