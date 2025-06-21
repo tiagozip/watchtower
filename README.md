@@ -2,7 +2,7 @@
 
 # watchtower
 
-Powerful, privacy-friendly & open-source Discord security bot that doesn't suck and runs in the background.
+open-source Discord moderation bot that actually doesn't suck—powerful, privacy-friendly, and stays out of your way
 
 ## features
 
