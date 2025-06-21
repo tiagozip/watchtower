@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watchtower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #0a0a0a;
+        color: white;
+        color-scheme: dark;
+        font-optical-sizing: auto;
+
+        font-family: "Geist", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+          "Helvetica Neue", sans-serif;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        margin-top: 1.5em;
+        padding: 2rem;
+        border: 1px solid #6663;
+        padding-bottom: 8em;
+        overflow: hidden;
+        position: relative;
+      }
+      main::before {
+        content: "";
+        display: block;
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        filter: blur(40px);
+        pointer-events: none;
+
+        --color-blue-500: #f14066;
+        --color-blue-600: #f14066;
+        mask-image: linear-gradient(to bottom, transparent, white, transparent);
+        background: repeating-linear-gradient(
+          65deg,
+          var(--color-blue-500),
+          var(--color-blue-500) 12px,
+          color-mix(in oklab, var(--color-blue-600) 30%, transparent) 20px,
+          transparent 200px
+        );
+        z-index: 1;
+      }
+      main .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 12;
+        margin-top: 4em;
+        margin-bottom: 1.5em;
+      }
+      main .logo svg {
+        height: 54px;
+        width: auto;
+      }
+      h1 {
+        text-align: center;
+        max-width: 600px;
+        margin: 0px auto;
+        margin-top: 0em;
+        font-size: 40px;
+        line-height: 1.1;
+        font-weight: 600;
+        z-index: 12;
+        position: relative;
+      }
+      .desc {
+        text-align: center;
+        max-width: 600px;
+        margin: 0px auto;
+        margin-top: 0.7em;
+        font-size: 18px;
+        opacity: 0.9;
+      }
+      .invite {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: fit-content;
+
+        margin-top: 2em;
+        font-weight: 600;
+        padding: 0.8rem 1.5rem;
+
+        background-color: white;
+        color: black;
+        z-index: 12;
+        position: relative;
+        text-decoration: none;
+        border-radius: 120px;
+        transition: transform 0.25s, opacity 0.25s;
+      }
+      .invite:hover {
+        transform: scale(1.03);
+      }
+      .invite:active {
+        transform: scale(0.98);
+        opacity: 0.7;
+      }
+      .features {
+        max-width: 1100px;
+        margin: 0 auto;
+        margin-top: 2em;
+        position: relative;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 0px;
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s, background-color 0.25s;
+      }
+
+      .feature-icon {
+        margin-bottom: 0.8rem;
+        opacity: 0.9;
+      }
+
+      .feature-card h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem 0;
+        color: white;
+      }
+
+      .feature-card p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+        opacity: 0.8;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .feature-card a {
+        color: white;
+      }
+
+      section.captchas {
+        max-width: 1100px;
+        margin: 0 auto;
+        margin-top: 1.5em;
+        padding: 2rem;
+        border: 1px solid #6663;
+        text-align: center;
+        padding-bottom: 4em;
+        background: linear-gradient(
+          180deg,
+          rgba(241, 64, 102, 0),
+          rgba(241, 64, 102, 0.05)
+        );
+      }
+
+      .captchas h2 {
+        font-size: 25px;
+        margin-bottom: 0px;
+        font-weight: 600;
+      }
+
+      .captchas p {
+        line-height: 1.5;
+        max-width: 500px;
+        margin: 0px auto;
+        margin-top: 1em;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      footer {
+        max-width: 1100px;
+        margin: 0 auto;
+        margin-top: 1.5em;
+        padding: 2rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      footer svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      footer p {
+        margin: 0px;
+        margin-top: 6px;
+      }
+
+      footer p a {
+        color: white;
+        font-weight: 500;
+        text-underline-offset: 2px;
+        text-decoration-color: rgba(255, 255, 255, 0.3);
+      }
+
+      footer p.legals a {
+        font-weight: inherit;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      @keyframes descAnimation {
+        0% {
+          opacity: 0;
+          transform: translateY(6px);
+          filter: blur(1px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+          filter: blur(1px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.98);
+          filter: blur(1px);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          filter: blur(0.5px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+
+      @keyframes inviteAnimation {
+        0% {
+          opacity: 0;
+          filter: blur(1px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+
+      h1 {
+        animation: fadeInUp 0.4s ease-out 0.2s both;
+      }
+
+      .desc {
+        animation: descAnimation 0.4s ease-out 0.3s both;
+      }
+
+      .invite {
+        animation: inviteAnimation 0.4s ease-out 0.4s both;
+      }
+
+      .features {
+        animation: fadeIn 0.4s ease-out 0.5s both;
+      }
+
+      .feature-card {
+        animation: fadeIn 0.4s ease-out both;
+      }
+
+      .feature-card:nth-child(1) {
+        animation-delay: 0.6s;
+      }
+      .feature-card:nth-child(2) {
+        animation-delay: 0.65s;
+      }
+      .feature-card:nth-child(3) {
+        animation-delay: 0.7s;
+      }
+      .feature-card:nth-child(4) {
+        animation-delay: 0.75s;
+      }
+      .feature-card:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+      .feature-card:nth-child(6) {
+        animation-delay: 0.85s;
+      }
+
+      .captchas {
+        animation: fadeInUp 0.4s ease-out 0.9s both;
+      }
+
+      footer {
+        animation: fadeInUp 0.4s ease-out 0.95s both;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .features-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .feature-card {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="logo">
+        <svg
+          width="191"
+          height="434"
+          viewBox="0 0 191 434"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.725 177.525V138.075H39.45V59.175H19.725V39.45L98.625 0L177.525 39.45V59.175H157.8V138.075H177.525V177.525H152.671L28.404 249.324L39.45 177.525H19.725ZM118.35 138.075V59.175H78.9V138.075H118.35ZM0 433.95L0.788999 429.216L180.484 325.462L190.741 392.133L118.35 433.95H0ZM20.7113 299.228L163.915 216.975L174.172 283.448L8.48175 379.114L20.7113 299.228Z"
+            fill="url(#paint0_linear_1087_2)"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear_1087_2"
+              x1="95.3704"
+              y1="0"
+              x2="95.3704"
+              y2="433.95"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="white" />
+              <stop offset="1" stop-color="white" stop-opacity="0.62" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1>Modern Discord moderation bot that actually doesn't suck</h1>
+      <p class="desc">
+        Powerful, open-source, privacy-friendly, and stays out of your way
+      </p>
+      <a
+        href="https://discord.com/oauth2/authorize?client_id=1371927140311760938"
+        target="_blank"
+        class="invite"
+      >
+        Invite Watchtower
+      </a>
+    </main>
+
+    <section class="features">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-shield"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"
+              />
+            </svg>
+          </div>
+          <h3>Actually smart automod</h3>
+          <p>
+            Automated moderation with smart detection for spam, toxicity, and
+            inappropriate content. Keep your server clean without constant
+            manual oversight.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-bolt"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />
+            </svg>
+          </div>
+          <h3>Lightning fast</h3>
+          <p>
+            Built with performance in mind. Watchtower uses Bun, an extremely
+            fast runtime, in order to guarantee that spammers will never get
+            through.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-lock"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"
+              />
+              <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+              <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+            </svg>
+          </div>
+          <h3>Your data stays yours.</h3>
+          <p>
+            Privacy is a right, not a privilege. Watchtower is hosted inside the
+            European Union, known for its strict privacy laws.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-archery-arrow"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M14 7v3h3l3 -3h-3v-3z" />
+              <path d="M14 10l-9 9" />
+              <path d="M5 15v4h4" />
+            </svg>
+          </div>
+          <h3>Very few false positives</h3>
+          <p>
+            You shouldn't have to worry about people in your server getting
+            banned for no reason.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
+              />
+            </svg>
+          </div>
+          <h3>Open-source</h3>
+
+          <!-- prettier-ignore -->
+          <p>
+            One of the few open-source and actively maintained moderation bots.
+            <a href="https://github.com/tiagorangel1/watchtower">Contribute to the code</a>
+            or customize it for your needs.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-tool"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"
+              />
+            </svg>
+          </div>
+          <h3>Customizable</h3>
+          <p>
+            Customize whitelists, blocklists, and settings to fit your server's
+            needs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="captchas">
+      <h2>No more annoying CAPTCHAs.</h2>
+      <p>
+        Watchtower's smart enough to not need to bother users with CAPTCHAs or
+        other verifications at all. Discord moderation bots should be invisible,
+        not annoying.
+      </p>
+      <a
+        href="https://discord.com/oauth2/authorize?client_id=1371927140311760938"
+        class="invite"
+        target="_blank"
+      >
+        Invite Watchtower
+      </a>
+    </section>
+
+    <footer>
+      <a href="https://github.com/tiagorangel1/watchtower">
+        <svg
+          width="1024"
+          height="1024"
+          viewBox="0 0 1024 1024"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
+            transform="scale(64)"
+            fill="#fff"
+          />
+        </svg>
+      </a>
+      <p>
+        built by
+        <a href="https://tiagorangel.com">tiago</a>
+      </p>
+      <p class="legals">
+        <a href="/legal/privacy.html">privacy</a>
+        •
+        <a href="/legal/terms.html">terms and ethics</a>
+      </p>
+    </footer>
+  </body>
+</html>

@@ -2,10 +2,10 @@
   "name": "watchtower",
   "module": "src/index.js",
   "dependencies": {
-    "discord.js": "^14.19.3"
+    "discord.js": "^14.20.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.16"
+    "@types/bun": "^1.2.17"
   },
   "scripts": {
     "start": "bun run src/index.js",
