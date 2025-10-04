@@ -26,6 +26,7 @@ export const CONFIG = {
   MESSAGES: {
     RECENT_MESSAGES_TO_TRACK: 5,
     REPEAT_COUNT_THRESHOLD: 5,
+		LOG_REPEATS: false
   },
 
   APIS: {
