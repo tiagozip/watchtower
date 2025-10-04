@@ -74,11 +74,17 @@ export function isRepeatedMessage(message) {
 	userLastActivity.set(userId, Date.now());
 
 	const userMessages = userRecentMessages.get(userId) || [];
-	const isRepeated = userMessages.some(
-		(msg) => msg.trim().toLowerCase() === normalizedCurrentContent,
-	);
 
-	if (isRepeated) return true;
+	let occurrenceCount = 1;
+	for (const msg of userMessages) {
+		if ((msg || "").trim().toLowerCase() === normalizedCurrentContent) {
+			occurrenceCount += 1;
+		}
+	}
+
+	if (occurrenceCount >= CONFIG.MESSAGES.REPEAT_COUNT_THRESHOLD) {
+		return true;
+	}
 
 	const updatedUserMessages = [currentContent, ...userMessages].slice(
 		0,
