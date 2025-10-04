@@ -1,6 +1,6 @@
+import os from "node:os";
 import { ApplicationCommandOptionType } from "discord.js";
 import colors from "../utils/colors.js";
-import os from "os";
 
 export default function (client) {
   const commandName = "watchtower";
