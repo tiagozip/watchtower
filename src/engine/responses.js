@@ -34,7 +34,7 @@ export async function handleRateLimitViolation(message) {
 export async function handleRepeatedMessage(message) {
   message.delete().catch(() => {});
 
-  if (CONFIG.MESSAGES.LOG_REPEATS) return;
+  if (!CONFIG.MESSAGES.LOG_REPEATS) return;
 
   const reply = await message.channel.send({
     embeds: [
