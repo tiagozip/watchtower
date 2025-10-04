@@ -10,105 +10,105 @@ const userLastActivity = new Map();
 setInterval(cleanupInactiveMessages, CLEANUP_INTERVAL_MS);
 
 function cleanupInactiveMessages() {
-	const now = Date.now();
-	const toDelete = [];
+  const now = Date.now();
+  const toDelete = [];
 
-	for (const [userId, lastActivity] of userLastActivity.entries()) {
-		if (now - lastActivity > MAX_INACTIVE_TIME_MS) {
-			toDelete.push(userId);
-		}
-	}
+  for (const [userId, lastActivity] of userLastActivity.entries()) {
+    if (now - lastActivity > MAX_INACTIVE_TIME_MS) {
+      toDelete.push(userId);
+    }
+  }
 
-	toDelete.forEach((userId) => {
-		userRecentMessages.delete(userId);
-		userLastActivity.delete(userId);
-	});
+  toDelete.forEach((userId) => {
+    userRecentMessages.delete(userId);
+    userLastActivity.delete(userId);
+  });
 }
 
 export function extractMessageContent(message) {
-	let combinedTextContent = message.content || "";
+  let combinedTextContent = message.content || "";
 
-	message.embeds?.forEach((embed) => {
-		if (embed.title) combinedTextContent += `\n${embed.title}`;
-		if (embed.description) combinedTextContent += `\n${embed.description}`;
+  message.embeds?.forEach((embed) => {
+    if (embed.title) combinedTextContent += `\n${embed.title}`;
+    if (embed.description) combinedTextContent += `\n${embed.description}`;
 
-		embed.fields?.forEach((field) => {
-			combinedTextContent += `\n${field.name}\n${field.value}`;
-		});
+    embed.fields?.forEach((field) => {
+      combinedTextContent += `\n${field.name}\n${field.value}`;
+    });
 
-		if (embed.footer?.text) combinedTextContent += `\n${embed.footer.text}`;
-		if (embed.author?.name) combinedTextContent += `\n${embed.author.name}`;
-	});
+    if (embed.footer?.text) combinedTextContent += `\n${embed.footer.text}`;
+    if (embed.author?.name) combinedTextContent += `\n${embed.author.name}`;
+  });
 
-	return combinedTextContent;
+  return combinedTextContent;
 }
 
 export function extractImageUrls(message) {
-	const imageUrls = [];
+  const imageUrls = [];
 
-	message.attachments?.forEach((attachment) => {
-		if (attachment.contentType?.startsWith("image/") && attachment.url) {
-			imageUrls.push(attachment.url);
-		}
-	});
+  message.attachments?.forEach((attachment) => {
+    if (attachment.contentType?.startsWith("image/") && attachment.url) {
+      imageUrls.push(attachment.url);
+    }
+  });
 
-	message.embeds?.forEach((embed) => {
-		if (embed.image?.url) {
-			imageUrls.push(embed.image.url);
-		}
-		if (embed.thumbnail?.url) {
-			imageUrls.push(embed.thumbnail.url);
-		}
-	});
+  message.embeds?.forEach((embed) => {
+    if (embed.image?.url) {
+      imageUrls.push(embed.image.url);
+    }
+    if (embed.thumbnail?.url) {
+      imageUrls.push(embed.thumbnail.url);
+    }
+  });
 
-	return [...new Set(imageUrls)];
+  return [...new Set(imageUrls)];
 }
 
 export function isRepeatedMessage(message) {
-	const userId = message.author.id;
-	const currentContent = message.content || "";
-	const normalizedCurrentContent = currentContent.trim().toLowerCase();
+  const userId = message.author.id;
+  const currentContent = message.content || "";
+  const normalizedCurrentContent = currentContent.trim().toLowerCase();
 
-	if (!normalizedCurrentContent) return false;
+  if (!normalizedCurrentContent) return false;
 
-	userLastActivity.set(userId, Date.now());
+  userLastActivity.set(userId, Date.now());
 
-	const userMessages = userRecentMessages.get(userId) || [];
+  const userMessages = userRecentMessages.get(userId) || [];
 
-	let occurrenceCount = 1;
-	for (const msg of userMessages) {
-		if ((msg || "").trim().toLowerCase() === normalizedCurrentContent) {
-			occurrenceCount += 1;
-		}
-	}
+  let occurrenceCount = 1;
+  for (const msg of userMessages) {
+    if ((msg || "").trim().toLowerCase() === normalizedCurrentContent) {
+      occurrenceCount += 1;
+    }
+  }
 
-	if (occurrenceCount >= CONFIG.MESSAGES.REPEAT_COUNT_THRESHOLD) {
-		return true;
-	}
+  if (occurrenceCount >= CONFIG.MESSAGES.REPEAT_COUNT_THRESHOLD) {
+    return true;
+  }
 
-	const updatedUserMessages = [currentContent, ...userMessages].slice(
-		0,
-		CONFIG.MESSAGES.RECENT_MESSAGES_TO_TRACK,
-	);
-	userRecentMessages.set(userId, updatedUserMessages);
+  const updatedUserMessages = [currentContent, ...userMessages].slice(
+    0,
+    CONFIG.MESSAGES.RECENT_MESSAGES_TO_TRACK
+  );
+  userRecentMessages.set(userId, updatedUserMessages);
 
-	return false;
+  return false;
 }
 
 export function createModerationCacheKey(textContent, imageUrls) {
-	return Bun.hash(textContent + JSON.stringify(imageUrls.sort())).toString();
+  return Bun.hash(textContent + JSON.stringify(imageUrls.sort())).toString();
 }
 
 export function prepareOpenAIInput(textContent, imageUrls) {
-	const inputs = [];
+  const inputs = [];
 
-	if (textContent) {
-		inputs.push({ type: "text", text: textContent });
-	}
+  if (textContent) {
+    inputs.push({ type: "text", text: textContent });
+  }
 
-	imageUrls.forEach((url) => {
-		inputs.push({ type: "image_url", image_url: { url } });
-	});
+  imageUrls.forEach((url) => {
+    inputs.push({ type: "image_url", image_url: { url } });
+  });
 
-	return inputs;
+  return inputs;
 }
